@@ -1,6 +1,6 @@
-# Portable C++ Hashing Library
+# Portable C Hashing Library
 
-This is a mirror of my library hosted at https://create.stephan-brumme.com/hash-library/
+This is a C binding for the library hosted at https://create.stephan-brumme.com/hash-library/
 
 In a nutshell:
 
@@ -18,7 +18,7 @@ You can find code examples, benchmarks and much more on my website https://creat
 
 This example computes SHA256 hashes but the API is more or less identical for all hash algorithms:
 
-``` cpp
+``` c
 // SHA2 test program
 #include "sha256.h"
 #include <iostream> // for std::cout only, not needed for hashing library
