@@ -4,22 +4,24 @@
 // see http://create.stephan-brumme.com/disclaimer.html
 //
 
-#pragma once
-
-//#include "hash.h"
-#include <string>
+#ifndef CRC32_H
+#define CRC32_H
+// #include "hash.h"
+#include <string.h>
 
 // define fixed size integer types
 #ifdef _MSC_VER
 // Windows
-typedef unsigned __int8  uint8_t;
+typedef unsigned __int8 uint8_t;
 typedef unsigned __int32 uint32_t;
 #else
 // GCC
 #include <stdint.h>
 #endif
 
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 /// compute CRC32 hash, based on Intel's Slicing-by-8 algorithm
 /** Usage:
     CRC32 crc32;
@@ -36,34 +38,32 @@ typedef unsigned __int32 uint32_t;
     Note:
     You can find code for the faster Slicing-by-16 algorithm on my website, too:
     http://create.stephan-brumme.com/crc32/
-    Its unrolled version is about twice as fast but its look-up table doubled in size as well.
+    Its unrolled version is about twice as fast but its look-up table doubled in
+   size as well.
   */
-class CRC32 //: public Hash
-{
-public:
-  /// hash is 4 bytes long
-  enum { HashBytes = 4 };
-
-  /// same as reset()
-  CRC32();
-
-  /// compute CRC32 of a memory block
-  std::string operator()(const void* data, size_t numBytes);
-  /// compute CRC32 of a string, excluding final zero
-  std::string operator()(const std::string& text);
-
-  /// add arbitrary number of bytes
-  void add(const void* data, size_t numBytes);
-
-  /// return latest hash as 8 hex characters
-  std::string getHash();
-  /// return latest hash as bytes
-  void        getHash(unsigned char buffer[HashBytes]);
-
-  /// restart
-  void reset();
-
-private:
-  /// hash
-  uint32_t m_hash;
+enum CRC32_ENUM {
+  HashBytes = 4,
 };
+typedef struct CRC32 {
+  uint32_t _hash;
+} CRC32;
+
+/// Return the latest hash as 8 hex characters
+void CRC32_get_hash(CRC32 *crc32, unsigned char buffer[HashBytes]);
+
+/// restart
+void CRC32_reset(CRC32 *crc32);
+
+/// add arbitrary number of bytes
+void CRC32_add(CRC32 *crc32, const void *data, size_t numBytes);
+
+/// compute CRC32 of a memory block
+// std::string operator()(const void* data, size_t numBytes);
+
+/// compute CRC32 of a string, excluding final zero
+// std::string operator()(const std::string &text);
+
+#ifdef __cplusplus
+}
+#endif
+#endif
