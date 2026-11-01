@@ -89,7 +89,7 @@ public:
   /// same as reset()
   CRC32Wrapped() {
     crc32 = new CRC32;
-    crc32->_hash = 0;
+    CRC32_reset(crc32);
   }
 
   /// compute CRC32 of a memory block
@@ -114,7 +114,7 @@ public:
   }
 
   /// restart
-  void reset();
+  void reset() { CRC32_reset(crc32); }
   ~CRC32Wrapped() { delete crc32; }
 
 private:
