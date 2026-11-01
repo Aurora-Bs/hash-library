@@ -78,5 +78,48 @@ void CRC32_reset(CRC32 *crc32);
 
 #ifdef __cplusplus
 }
+#include <string>
+// C++ wrapper class for testing purposes
+class CRC32Wrapped //: public Hash
+{
+public:
+  /// hash is 4 bytes long
+  enum { HashBytes = 4 };
+
+  /// same as reset()
+  CRC32Wrapped() {
+    crc32 = new CRC32;
+    crc32->_hash = 0;
+  }
+
+  /// compute CRC32 of a memory block
+  std::string operator()(const void *data, size_t numBytes) {
+    return CRC32_compute_block(crc32, data, numBytes);
+  }
+  /// compute CRC32 of a string, excluding final zero
+  std::string operator()(const std::string &text) {
+    return CRC32_compute_string(crc32, text.c_str());
+  }
+
+  /// add arbitrary number of bytes
+  void add(const void *data, size_t numBytes) {
+    CRC32_add(crc32, data, numBytes);
+  }
+
+  /// return latest hash as 8 hex characters
+  std::string getHash() { return CRC32_get_hash_as_hex(crc32); }
+  /// return latest hash as bytes
+  void getHash(unsigned char buffer[HashBytes]) {
+    return CRC32_get_hash_as_bytes(crc32, buffer);
+  }
+
+  /// restart
+  void reset();
+  ~CRC32Wrapped() { delete crc32; }
+
+private:
+  /// hash
+  CRC32 *crc32;
+};
 #endif
-#endif
+#endif // CRC32_H
