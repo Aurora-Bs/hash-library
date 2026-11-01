@@ -62,17 +62,16 @@ NODISCARD char *CRC32_compute_block(CRC32 *crc32, const void *data,
                                     size_t numBytes);
 
 // compute CRC32 of a null-terminated string, excluding final zero.
-NODISCARD char *CRC32_compute_string(CRC32 *crc32, char *text);
+NODISCARD char *CRC32_compute_string(CRC32 *crc32, const char *text);
 
 /// add arbitrary number of bytes
 void CRC32_add(CRC32 *crc32, const void *data, size_t numBytes);
 
 /// Return the latest hash as 8 hex characters
-NODISCARD char *CRC32_get_hash_as_hex(CRC32 *crc32,
-                                      unsigned char buffer[HashBytes]);
+NODISCARD char *CRC32_get_hash_as_hex(CRC32 *crc32);
 
 /// return the latest hash as bytes
-NODISCARD char *CRC32_get_hash_as_bytes(CRC32 *crc32);
+void CRC32_get_hash_as_bytes(CRC32 *crc32, unsigned char buffer[HashBytes]);
 
 /// restart
 void CRC32_reset(CRC32 *crc32);
