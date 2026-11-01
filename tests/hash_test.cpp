@@ -9,13 +9,13 @@
 // -o tests && ./tests
 
 #include "../crc32.h"
+#include "../hmac.h"
 #include "../keccak.h"
 #include "../md5.h"
 #include "../sha1.h"
 #include "../sha256.h"
 #include "../sha3.h"
-
-#include "../hmac.h"
+#include "gtest/gtest.h"
 
 #include <string>
 #include <vector>
@@ -707,6 +707,11 @@ int main() {
   std::string million(1000000, 'a');
 
   std::cout << "test SHA1 ...\n";
+  TEST(SHA1, ManualEmpty) {
+    ASSERT_EQ(check<SHA1>(empty, "da39a3ee5e6b4b0d3255bfef95601890afd80709"),
+              0);
+  }
+  TEST(SHA1, Manual)
   errors += check<SHA1>(empty, "da39a3ee5e6b4b0d3255bfef95601890afd80709");
   errors += check<SHA1>(abc, "a9993e364706816aba3e25717850c26c9cd0d89d");
   errors += check<SHA1>(abc448bits, "84983e441c3bd26ebaae4aa1f95129e5e54670f1");
