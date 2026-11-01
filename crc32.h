@@ -8,7 +8,16 @@
 #define CRC32_H
 // #include "hash.h"
 #include <string.h>
-
+// check if C23 features can be used.
+#ifdef __STDC_VERSION__
+#if (__STDC_VERSION__ >= 202311L)
+#define NODISCARD [[nodiscard]]
+#else
+#define NODISCARD
+#endif
+#else
+#define NODISCARD
+#endif
 // define fixed size integer types
 #ifdef _MSC_VER
 // Windows
@@ -44,24 +53,29 @@ extern "C" {
 enum CRC32_ENUM {
   HashBytes = 4,
 };
+
 typedef struct CRC32 {
   uint32_t _hash;
 } CRC32;
+// compute the CRC32 of a memory block
+NODISCARD char *CRC32_compute_block(CRC32 *crc32, const void *data,
+                                    size_t numBytes);
 
-/// Return the latest hash as 8 hex characters
-void CRC32_get_hash(CRC32 *crc32, unsigned char buffer[HashBytes]);
-
-/// restart
-void CRC32_reset(CRC32 *crc32);
+// compute CRC32 of a null-terminated string, excluding final zero.
+NODISCARD char *CRC32_compute_string(CRC32 *crc32, char *text);
 
 /// add arbitrary number of bytes
 void CRC32_add(CRC32 *crc32, const void *data, size_t numBytes);
 
-/// compute CRC32 of a memory block
-// std::string operator()(const void* data, size_t numBytes);
+/// Return the latest hash as 8 hex characters
+NODISCARD char *CRC32_get_hash_as_hex(CRC32 *crc32,
+                                      unsigned char buffer[HashBytes]);
 
-/// compute CRC32 of a string, excluding final zero
-// std::string operator()(const std::string &text);
+/// return the latest hash as bytes
+NODISCARD char *CRC32_get_hash_as_bytes(CRC32 *crc32);
+
+/// restart
+void CRC32_reset(CRC32 *crc32);
 
 #ifdef __cplusplus
 }
