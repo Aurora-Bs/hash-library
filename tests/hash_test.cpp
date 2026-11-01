@@ -823,7 +823,8 @@ TEST(Keccak224, BugCheck) {
 // check all automatically generated testsets
 TEST(CRC32, GenericSet) {
   for (size_t i = 0; i < NumTests; i++) {
-    check<CRC32Wrapped>(hex2bin(testset[i].input), testset[i].crc32b);
+    EXPECT_EQ(check<CRC32Wrapped>(hex2bin(testset[i].input), testset[i].crc32b),
+              0);
   }
 }
 TEST(MD5, GenericSet) {
