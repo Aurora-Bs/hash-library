@@ -14,9 +14,11 @@ set(gtest_force_shared_crt
     ON
     CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
-add_library(CRC32 STATIC crc32.c)
+add_library(CRC32 STATIC crc32.c crc32.h)
+target_include_directories(CRC32 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 add_library(hash-library STATIC keccak.cpp md5.cpp sha1.cpp sha256.cpp sha3.cpp)
-target_link_libraries(hash-library INTERFACE CRC32)
+target_include_directories(hash-library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(hash-library PUBLIC CRC32)
 enable_testing()
 add_executable(hash-library-test tests/hash_test.cpp)
 target_link_libraries(hash-library-test PRIVATE hash-library GTest::gtest_main)
