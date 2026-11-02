@@ -460,8 +460,8 @@ NODISCARD char *CRC32_get_hash_as_hex(CRC32 *crc32) {
   // zero-terminated string
   hashBuffer[8] = 0;
 
-  // copy
-  char *finalBuffer = (char *)malloc(HashBytes * sizeof(char));
+  // copy (add 1 for null terminated string)
+  char *finalBuffer = (char *)malloc(sizeof(hashBuffer));
   strcpy(finalBuffer, hashBuffer);
   return finalBuffer;
 }
